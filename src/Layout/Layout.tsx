@@ -1,3 +1,4 @@
+// src/Layout/Layout.tsx
 import Footer from '@/components/Footer';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/AppSidebar';
@@ -6,23 +7,21 @@ import { Outlet } from 'react-router-dom';
 
 const Layout = () => {
   return (
-    <SidebarProvider className="flex">
+    <SidebarProvider className="flex h-screen">
       <div className="w-64">
         <AppSidebar />
       </div>
-      <main className="flex-1 p-4 ">
-        <div className="flex flex-col h-full gap-3">
-          <header>
-            <Head />
-          </header>
-          <div className="flex-1 w-full">
-              <Outlet />
-          </div>
-          <footer>
-            <Footer />
-          </footer>
-        </div>
-      </main>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <header className="shrink-0 p-2">
+          <Head />
+        </header>
+        <main className="flex-1 overflow-hidden p-4">
+          <Outlet />
+        </main>
+        <footer className="shrink-0">
+          <Footer />
+        </footer>
+      </div>
     </SidebarProvider>
   );
 };

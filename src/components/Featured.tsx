@@ -74,7 +74,7 @@ const FeaturedList = () => {
     );
   }
   if (error != '' || featured.length == 0) {
-    return <div className="text-red-500">{error}</div>;
+    return <div className="text-red-500 2xl:text-4xl">{error}</div>;
   }
   if (featured.length === 12) {
     return (
@@ -116,7 +116,9 @@ const FeaturedList = () => {
 const Featured = () => {
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-2xl 2xl:text-4xl font-bold text-violet-500">精选歌单</h2>
+      <h2 className="text-2xl 2xl:text-4xl font-bold text-violet-500">
+        精选歌单
+      </h2>
       <div className="grid grid-cols-6 gap-3 items-start">
         <FeaturedList />
       </div>

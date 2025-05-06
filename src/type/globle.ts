@@ -33,13 +33,17 @@ export type TagsType = {
 export type SongType = {
   id: number;
   name: string;
-  ar: {
-    id: number;
-    name: string;
-  };
+  ar: [
+    {
+      id: number;
+      name: string;
+    }
+  ];
   al: {
     id: number;
     name: string;
     picUrl: string;
   };
+  dt: number;
+  url?: string;
 };
