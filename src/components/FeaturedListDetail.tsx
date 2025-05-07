@@ -1,4 +1,4 @@
-import {  useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { APIURL } from '@/lib/constoct';
 import { useEffect, useMemo, useState } from 'react';
 import Image from '@/components/ui/Image';
@@ -21,9 +21,12 @@ const PlayList = () => {
   const itemsPerPage = 5; // 每页显示5条数据
   const {
     playlist: allsongs,
+    isInUrl,
     setPlaylist,
-    setCurrentSong,
-    play,
+    fetchCurrentSong,
+    chakedSong,
+    setIndex,
+    nextSong,
   } = useMusicStore();
 
   const currentPageData = useMemo(() => {
@@ -39,69 +42,39 @@ const PlayList = () => {
     return `${year}-${month}-${day}`;
   };
 
-  const handlePlaySong = async (song: SongType) => {
+  const handlePlaySong = async (index: number) => {
     try {
-      // 发送请求查看歌曲url是否存在
-      const isUrlin = await fetch(`${APIURL}/check/music?id=${song.id}`, {
+      setIndex(index);
+      await chakedSong(index);
+      await fetchCurrentSong(index);
+      if (!isInUrl!.success) {
+        console.log(isInUrl?.message);
+        alert(`${isInUrl!.message}`);
+      } else {
+        setIndex(index + 1);
+        nextSong();
+      }
+    } catch (error) {
+      console.error('获取歌曲失败:', error);
+    }
+  };
+
+  const getPlaylist = async (id: string) => {
+    try {
+      const res = await fetch(`${APIURL}/playlist/track/all?id=${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
       });
-      const isUrlinData = await isUrlin.json();
-      // console.log(isUrlinData);
-      if (isUrlinData.success) {
-        // 发送请求获取歌曲 URL
-        const res = await fetch(
-          `${APIURL}/song/url/v1?id=${song.id}&level=exhigh`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-          }
-        );
 
-        const data = await res.json();
-        if (data.code !== 200 || !data.data?.[0]?.url) {
-          throw new Error('获取歌曲 URL 失败');
-        }
-
-        // 创建带有 URL 的歌曲对象
-        const songWithUrl = {
-          ...song,
-          url: data.data[0].url,
-        };
-
-        // 设置当前歌曲并播放
-        setCurrentSong(songWithUrl);
-        play();
-      } else {
-        alert(`${isUrlinData.message}`);
-      }
+      const data = await res.json();
+      console.log(data);
+      return data.songs;
     } catch (error) {
-      console.error('播放歌曲失败:', error);
-      // 这里可以添加错误处理，比如显示提示信息
+      console.error('获取歌单失败:', error);
     }
-  };
-
-  const getPlaylist = async (id: string) => {
-    const res = await fetch(`${APIURL}/playlist/track/all?id=${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
-
-    const data = await res.json();
-    console.log(data);
-    // console.log(data.songs.ar.name);
-    // console.log(data.songs);
-    // console.log(songs);
-    return data.songs;
   };
 
   useEffect(() => {
@@ -143,10 +116,11 @@ const PlayList = () => {
           <ul className="w-full flex-1  flex-col space-y-1 overflow-auto">
             {currentPageData.map((song, index) => {
               const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
+              const songInxex = globalIndex - 1;
               return (
                 <li
                   key={song.id}
-                  onClick={() => handlePlaySong(song)}
+                  onClick={() => handlePlaySong(songInxex)}
                   className="flex flex-row gap-x-2 2xl:gap-5 items-center p-3 rounded-xl cursor-pointer hover:bg-violet-500"
                 >
                   <p className="text-sm 2xl:text-2xl">

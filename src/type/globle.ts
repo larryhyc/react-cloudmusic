@@ -47,3 +47,8 @@ export type SongType = {
   dt: number;
   url?: string;
 };
+
+export type isInUrl = {
+  success: boolean;
+  message: string;
+};

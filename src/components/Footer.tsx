@@ -1,8 +1,6 @@
 // src/components/Footer.tsx
 import { useEffect, useRef } from 'react';
 import useMusicStore from '@/store/useMuisicStore';
-import { SongType } from '@/type/globle';
-import { formatDuration } from '@/lib/utils';
 import Image from '@/components/ui/Image';
 import { Button } from './ui/button';
 import {
@@ -14,6 +12,7 @@ import {
   VolumeX,
 } from 'lucide-react';
 import { Slider } from './ui/slider';
+import { formatTime } from '@/lib/utils';
 
 const Footer = () => {
   const {
@@ -137,11 +136,11 @@ const Footer = () => {
                 className="rounded-lg mr-2"
               />
               <div className="truncate">
-                <p className="text-sm font-medium truncate text-violet-600">
+                <p className="text-sm font-medium truncate ">
                   {currentSong.name}
                 </p>
-                <p className="text-xs text-violet-400 truncate">
-                  {currentSong.ar.map((ar) => ar.name).join(', ')}
+                <p className="text-xs truncate">
+                  {currentSong.ar.map((ar) => ar.name).join(' / ')}
                 </p>
               </div>
             </>
@@ -154,7 +153,7 @@ const Footer = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-violet-600 hover:bg-violet-100"
+              className="h-8 w-8 text-violet-600 rounded-full hover:bg-violet-100"
               onClick={prevSong}
               disabled={!currentSong || playlist.length <= 1}
             >
@@ -163,7 +162,7 @@ const Footer = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="h-10 w-10 text-violet-600 hover:bg-violet-100"
+              className="h-10 w-10 text-violet-600 rounded-full hover:bg-violet-100"
               onClick={togglePlay}
               disabled={!currentSong}
             >
@@ -176,7 +175,7 @@ const Footer = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-violet-600 hover:bg-violet-100"
+              className="h-8 w-8 text-violet-600 rounded-full hover:bg-violet-100"
               onClick={nextSong}
               disabled={!currentSong || playlist.length <= 1}
             >
@@ -208,7 +207,7 @@ const Footer = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 text-violet-600 hover:bg-violet-100"
+            className="h-8 w-8 text-violet-600  rounded-full hover:bg-violet-100"
             onClick={toggleMute}
             disabled={!currentSong}
           >
@@ -240,12 +239,6 @@ const Footer = () => {
       </div>
     </div>
   );
-};
-// 辅助函数：格式化时间为 mm:ss
-const formatTime = (seconds: number) => {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 };
 
 export default Footer;
