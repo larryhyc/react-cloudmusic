@@ -31,7 +31,7 @@ const FeaturedList = () => {
     // console.log(time);
     try {
       const res = await fetch(
-        `${APIURL}/top/playlist/highquality?before=${time}&limit=12&cat=${tag}`,
+        `${APIURL}/top/playlist/highquality?before=${time}&limit=12&cat=${'日语'}`,
         {
           method: 'GET',
           headers: {
@@ -41,7 +41,6 @@ const FeaturedList = () => {
         }
       );
       const data = await res.json();
-      // console.log(data.playlists);
       if (data.playlists.length < 12) {
         setLoading(true);
         const tag = await getTags();
@@ -87,7 +86,7 @@ const FeaturedList = () => {
                 `/playlist/${item.id}?img=${item.coverImgUrl}&name=${item.name}&createTime=${item.createTime}`
               )
             }
-            className="w-full overflow-hidden cursor-pointer text-sm text-violet-500/50 hover:bg-violet-950 hover:text-violet-300 duration-300 ease-in-out"
+            className="w-full backdrop-sepia-50 overflow-hidden cursor-pointer text-sm text-violet-500/50 hover:bg-violet-950 hover:text-violet-300 duration-300 ease-in-out"
           >
             <CardContent>
               <Image

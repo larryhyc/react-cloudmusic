@@ -2,11 +2,14 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { APIURL } from '@/lib/constoct';
 import { useEffect, useMemo, useState } from 'react';
 import Image from '@/components/ui/Image';
-import { SongType } from '@/type/globle';
+import { Toaster } from '@/components/ui/sonner';
+// import { SongType, chakedSongType } from '@/type/globle';
 import { Skeleton } from '@/components/ui/skeleton';
 import Pagin from './Pagin';
 import useMusicStore from '@/store/useMuisicStore';
 import { formatDuration } from '@/lib/utils';
+import { SongType } from '@/type/globle';
+import { toast } from 'sonner';
 
 const PlayList = () => {
   const { id } = useParams();
@@ -20,19 +23,18 @@ const PlayList = () => {
   const [totalItems, setTotalItems] = useState(1);
   const itemsPerPage = 5; // 每页显示5条数据
   const {
-    playlist: allsongs,
-    isInUrl,
+    playlist,
     setPlaylist,
-    fetchCurrentSong,
-    chakedSong,
+    setCurrentSong,
     setIndex,
-    nextSong,
+    playSong,
+    setIsPlaying,
   } = useMusicStore();
 
   const currentPageData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    return allsongs.slice(start, start + itemsPerPage);
-  }, [allsongs, currentPage, itemsPerPage]);
+    return playlist.slice(start, start + itemsPerPage);
+  }, [playlist, currentPage, itemsPerPage]);
 
   const getCreateTime = (createTime: number) => {
     const date = new Date(createTime);
@@ -42,20 +44,33 @@ const PlayList = () => {
     return `${year}-${month}-${day}`;
   };
 
-  const handlePlaySong = async (index: number) => {
+  const chakeSong = async (index: number) => {
+    const id = playlist[index].id;
     try {
-      setIndex(index);
-      await chakedSong(index);
-      await fetchCurrentSong(index);
-      if (!isInUrl!.success) {
-        console.log(isInUrl?.message);
-        alert(`${isInUrl!.message}`);
-      } else {
-        setIndex(index + 1);
-        nextSong();
-      }
+      const res = await fetch(`${APIURL}/check/music/url?id=${id}`);
+      const data = await res.json();
+      return data;
     } catch (error) {
-      console.error('获取歌曲失败:', error);
+      console.error('播放歌曲失败:', error);
+    }
+  };
+
+  const handlePlaySong = async (index: number) => {
+    const res = await chakeSong(index);
+    if (res.success) {
+      try {
+        // await playSongByIndex(index);
+        setIsPlaying(false);
+        await setIndex(index);
+        const url = await setCurrentSong(index);
+        console.log(url);
+        playSong();
+      } catch (error) {
+        console.error('播放歌曲失败:', error);
+      }
+    } else {
+      handlePlaySong(index + 1);
+      toast.error('暂无版权，以为你播放下一首');
     }
   };
 
@@ -105,7 +120,7 @@ const PlayList = () => {
             创建日期: {createTime}
           </p>
           <p className="text-sm text-gray-400 2xl:text-2xl">
-            歌曲数量: {allsongs.length}
+            歌曲数量: {playlist.length}
           </p>
         </div>
       </div>
@@ -114,13 +129,13 @@ const PlayList = () => {
       ) : (
         <>
           <ul className="w-full flex-1  flex-col space-y-1 overflow-auto">
-            {currentPageData.map((song, index) => {
+            {currentPageData.map((song: SongType, index: number) => {
               const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
-              const songInxex = globalIndex - 1;
+              const songIndex = globalIndex - 1;
               return (
                 <li
                   key={song.id}
-                  onClick={() => handlePlaySong(songInxex)}
+                  onClick={() => handlePlaySong(songIndex)}
                   className="flex flex-row gap-x-2 2xl:gap-5 items-center p-3 rounded-xl cursor-pointer hover:bg-violet-500"
                 >
                   <p className="text-sm 2xl:text-2xl">

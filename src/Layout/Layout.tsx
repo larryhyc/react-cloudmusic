@@ -4,6 +4,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/AppSidebar';
 import Head from '@/components/Head';
 import { Outlet } from 'react-router-dom';
+import { Toaster } from 'sonner';
 
 const Layout = () => {
   return (
@@ -16,6 +17,7 @@ const Layout = () => {
           <Head />
         </header>
         <main className="flex-1 overflow-hidden p-4">
+          <Toaster richColors position="top-center" />
           <Outlet />
         </main>
         <footer className="shrink-0">

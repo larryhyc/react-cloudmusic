@@ -1,223 +1,94 @@
 // src/store/useMusicStore.ts
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { SongType, isInUrl } from '@/type/globle';
+import { SongType } from '@/type/globle';
 import { APIURL } from '@/lib/constoct';
-
-type PlayMode = 'sequential' | 'random' | 'loop';
 
 interface MusicState {
   // 状态
+  // 歌曲索引
   index: number;
+  // 当前要播放的歌曲
   currentSong: SongType | null;
+  // 当前播放歌曲的url
+  url: string;
+  // 歌曲列表
   playlist: SongType[];
-  isInUrl: isInUrl | null;
+  // 是否播放
   isPlaying: boolean;
-  isLoading: boolean;
+  // 当前播放时长
   currentTime: number;
+  // 总时长
   duration: number;
+  // 音量
   volume: number;
-  playMode: PlayMode;
-  message: string;
-  songCache: Record<string, SongType>;
 
-  // 操作方法
+  // 操作
+  // 设置索引
   setIndex: (index: number) => void;
-  fetchCurrentSong: (index: number) => Promise<void>;
-  chakedSong: (id: number) => Promise<isInUrl>;
-  setCurrentSong: (song: SongType | null) => void;
-  setPlaylist: (songs: SongType[]) => void;
-  play: () => void;
-  pause: () => void;
-  togglePlay: () => void;
+  // 设置当前播放歌曲
+  setCurrentSong: (index: number) => void;
+  // 设置播放列表
+  setPlaylist: (playlist: SongType[]) => void;
+  // 设置是否播放
+  setIsPlaying: (playing: boolean) => void;
+  // 设置当前播放时长
   setCurrentTime: (time: number) => void;
+  // 设置总时长
   setDuration: (duration: number) => void;
+  // 设置音量
   setVolume: (volume: number) => void;
-  togglePlayMode: () => void;
-  nextSong: () => Promise<void>;
-  prevSong: () => Promise<void>;
-  clearError: () => void;
+  // 播放歌曲
+  playSong: () => void;
 }
 
-const useMusicStore = create<MusicState>()(
-  devtools(
-    (set, get) => ({
-      // 初始状态
-      index: 0,
-      currentSong: null,
-      playlist: [],
-      isInUrl: null,
-      isPlaying: false,
-      isLoading: false,
-      currentTime: 0,
-      duration: 0,
-      volume: 0.8,
-      playMode: 'sequential',
-      message: '',
-      songCache: {},
+const useMusicStore = create<MusicState>(
+  devtools((set, get) => ({
+    index: 0,
+    currentSong: null,
+    url: '',
+    playlist: [],
+    isPlaying: false,
+    currentTime: 0,
+    duration: 0,
+    volume: 0.5,
 
-      // 基础操作方法
-
-      // 设置当前歌曲索引
-      setIndex: (index) => set({ index }, false, 'setIndex'),
-      // 设置播放列表
-      // 检查歌曲url是否存在
-      chakedSong: async (id: number): Promise<void> => {
-        try {
-          const res = await fetch(`${APIURL}/check/music/url?id=${id}`);
-          const data = await res.json();
-          set({ isInUrl: data }, false, 'chakedSong');
-        } catch (error) {
-          console.error('检查歌曲失败:', error);
-          const errorResult = { success: false, message: '检查歌曲失败' };
-          set({ isInUrl: errorResult }, false, 'chakedSongError');
+    setIndex: (index: number) => set({ index }),
+    setPlaylist: (playlist: SongType[]) => set({ playlist }),
+    // 发送请求获取歌曲的url
+    setCurrentSong: async (index: number) => {
+      const { playlist } = get();
+      const currentSong = playlist[index];
+      const res = await fetch(
+        `${APIURL}/song/url/v1?id=${currentSong.id}&level=exhigh`
+      );
+      const data = await res.json();
+      const url = data.data?.[0]?.url || '';
+      set({ currentSong, url, index });
+    },
+    setIsPlaying: (isPlaying?: boolean) => set({ isPlaying: isPlaying }),
+    setCurrentTime: (time: number) => {
+      // 直接设置当前时间（单位：秒）
+      set({ currentTime: time });
+    },
+    setDuration: (duration: number) => set({ duration }),
+    setVolume: (volume: number) => {
+      // 限制音量在0-1之间
+      const clampedVolume = Math.max(0, Math.min(1, volume));
+      set({ volume: clampedVolume });
+    },
+    playSong: () => {
+      const { url, isPlaying } = get();
+      const audio = document.querySelector('audio');
+      if (audio && url) {
+        audio.src = url;
+        if (!isPlaying) {
+          audio.play();
+          set({ isPlaying: true });
         }
-      },
-
-      // 获取当前歌曲URL并设置
-      fetchCurrentSong: async () => {
-        const { playlist, songCache, isInUrl, index } = get();
-        const song = playlist[index];
-        if (!song) return;
-
-        set({ isLoading: true }, false, 'startLoading');
-
-        try {
-          // 获取歌曲URL
-          const res = await fetch(
-            `${APIURL}/song/url/v1?id=${song.id}&level=exhigh`
-          );
-          const data = await res.json();
-
-          if (!data?.data?.[0]?.url) {
-            throw new Error('无效的歌曲URL数据');
-          }
-
-          const songWithUrl = { ...song, url: data.data[0].url };
-
-          set(
-            {
-              currentSong: songWithUrl,
-              isPlaying: true,
-              currentTime: 0,
-              isInUrl: isInUrl,
-              message: '',
-              songCache: { ...songCache, [song.id]: songWithUrl },
-              isLoading: false,
-            },
-            false,
-            'fetchCurrentSong'
-          );
-        } catch (error) {
-          console.error('获取歌曲URL失败:', error);
-          set(
-            {
-              isInUrl: null,
-              message: '获取歌曲URL失败',
-              isPlaying: false,
-              isLoading: false,
-            },
-            false,
-            'fetchCurrentSongError'
-          );
-        }
-      },
-
-      // 设置当前歌曲
-      setCurrentSong: (song) =>
-        set({ currentSong: song }, false, 'setCurrentSong'),
-
-      // 设置播放列表
-      setPlaylist: (songs) => {
-        const { currentSong } = get();
-        const shouldStop =
-          currentSong && !songs.some((s) => s.id === currentSong.id);
-
-        set(
-          {
-            playlist: songs,
-            isPlaying: shouldStop ? false : get().isPlaying,
-            currentSong: shouldStop ? null : currentSong,
-          },
-          false,
-          'setPlaylist'
-        );
-      },
-
-      // 播放控制
-      play: () => set({ isPlaying: true }, false, 'play'),
-      pause: () => set({ isPlaying: false }, false, 'pause'),
-      togglePlay: () =>
-        set((state) => ({ isPlaying: !state.isPlaying }), false, 'togglePlay'),
-
-      // 播放进度控制
-      setCurrentTime: (time) =>
-        set({ currentTime: time }, false, 'setCurrentTime'),
-      setDuration: (duration) => set({ duration }, false, 'setDuration'),
-      setVolume: (volume) => set({ volume }, false, 'setVolume'),
-
-      // 切换播放模式
-      togglePlayMode: () =>
-        set(
-          (state) => ({
-            playMode:
-              state.playMode === 'sequential'
-                ? 'random'
-                : state.playMode === 'random'
-                ? 'loop'
-                : 'sequential',
-          }),
-          false,
-          'togglePlayMode'
-        ),
-
-      // 下一首
-      nextSong: async () => {
-        const { playlist, currentSong, playMode, index } = get();
-        if (!playlist.length || !currentSong) return;
-
-        const currentIndex = playlist.findIndex(
-          (song) => song.id === currentSong.id
-        );
-        let nextIndex = index;
-
-        if (playMode === 'random') {
-          nextIndex = Math.floor(Math.random() * playlist.length);
-        } else {
-          nextIndex = (currentIndex + 1) % playlist.length;
-        }
-
-        await get().fetchCurrentSong(nextIndex);
-      },
-
-      // 上一首
-      prevSong: async () => {
-        const { playlist, currentSong, playMode } = get();
-        if (!playlist.length || !currentSong) return;
-
-        const currentIndex = playlist.findIndex(
-          (song) => song.id === currentSong.id
-        );
-        let prevIndex;
-
-        if (playMode === 'random') {
-          prevIndex = Math.floor(Math.random() * playlist.length);
-        } else {
-          prevIndex = (currentIndex - 1 + playlist.length) % playlist.length;
-        }
-
-        await get().fetchCurrentSong(prevIndex);
-      },
-
-      // 清除错误信息
-      clearError: () =>
-        set({ message: '', isInUrl: null }, false, 'clearError'),
-    }),
-    {
-      name: 'music-store',
-      enabled: process.env.NODE_ENV === 'development',
-    }
-  )
+      }
+    },
+  }))
 );
 
 export default useMusicStore;

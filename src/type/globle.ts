@@ -48,6 +48,12 @@ export type SongType = {
   url?: string;
 };
 
+export type chakedSongType = {
+  code: number;
+  success: boolean;
+  message: string;
+};
+
 export type isInUrl = {
   success: boolean;
   message: string;
