@@ -2,7 +2,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { APIURL } from '@/lib/constoct';
 import { useEffect, useMemo, useState } from 'react';
 import Image from '@/components/ui/Image';
-import { Toaster } from '@/components/ui/sonner';
+// import { Toaster } from '@/components/ui/sonner';
 // import { SongType, chakedSongType } from '@/type/globle';
 import { Skeleton } from '@/components/ui/skeleton';
 import Pagin from './Pagin';
@@ -10,6 +10,7 @@ import useMusicStore from '@/store/useMuisicStore';
 import { formatDuration } from '@/lib/utils';
 import { SongType } from '@/type/globle';
 import { toast } from 'sonner';
+import { ScrollArea } from '@radix-ui/react-scroll-area';
 
 const PlayList = () => {
   const { id } = useParams();
@@ -24,6 +25,7 @@ const PlayList = () => {
   const itemsPerPage = 5; // 每页显示5条数据
   const {
     playlist,
+    index,
     setPlaylist,
     setCurrentSong,
     setIndex,
@@ -128,15 +130,17 @@ const PlayList = () => {
         <DetialLoading />
       ) : (
         <>
-          <ul className="w-full flex-1  flex-col space-y-1 overflow-auto">
-            {currentPageData.map((song: SongType, index: number) => {
-              const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
+          <ul className="w-full flex-1  flex-col space-y-1 overflow-auto ">
+            {playlist.map((song: SongType, i: number) => {
+              const globalIndex = (currentPage - 1) * itemsPerPage + i + 1;
               const songIndex = globalIndex - 1;
               return (
                 <li
                   key={song.id}
                   onClick={() => handlePlaySong(songIndex)}
-                  className="flex flex-row gap-x-2 2xl:gap-5 items-center p-3 rounded-xl cursor-pointer hover:bg-violet-500"
+                  className={`flex flex-row gap-x-2 2xl:gap-5 items-center p-3 rounded-xl cursor-pointer hover:bg-violet-500 ${
+                    songIndex === index ? 'bg-violet-500' : ''
+                  }`}
                 >
                   <p className="text-sm 2xl:text-2xl">
                     {globalIndex < 10 ? `0${globalIndex}` : globalIndex}
@@ -158,7 +162,7 @@ const PlayList = () => {
               );
             })}
           </ul>
-          <div className="w-full">
+          {/* <div className="w-full">
             <Pagin
               totalItems={totalItems}
               itemsPerPage={itemsPerPage}
@@ -166,7 +170,7 @@ const PlayList = () => {
               onPageChange={setCurrentPage}
               maxVisiblePages={7}
             />
-          </div>
+          </div> */}
         </>
       )}
     </div>
@@ -186,7 +190,9 @@ const DetialLoading = () => {
 const FeaturedListDetail = () => {
   return (
     <div className="w-full h-full overflow-auto">
+      {/* <ScrollArea className='scroll-croll-area'> */}
       <PlayList />
+      {/* </ScrollArea> */}
     </div>
   );
 };

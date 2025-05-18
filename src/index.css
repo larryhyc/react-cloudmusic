@@ -71,7 +71,7 @@
   --sidebar-ring: oklch(0.541 0.281 293.009);
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   :root {
     color: var(--foreground);
     background-color: var(--background);
@@ -79,7 +79,7 @@
   button {
     background-color: var(--foreground);
   }
-}
+} */
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -126,4 +126,13 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -31,7 +31,7 @@ const FeaturedList = () => {
     // console.log(time);
     try {
       const res = await fetch(
-        `${APIURL}/top/playlist/highquality?before=${time}&limit=12&cat=${'日语'}`,
+        `${APIURL}/top/playlist/highquality?before=${time}&limit=12&cat=${'日语'}&timestamp=${Date.now()}`,
         {
           method: 'GET',
           headers: {

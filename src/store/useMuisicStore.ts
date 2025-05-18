@@ -7,7 +7,7 @@ import { APIURL } from '@/lib/constoct';
 interface MusicState {
   // 状态
   // 歌曲索引
-  index: number;
+  index: number | null;
   // 当前要播放的歌曲
   currentSong: SongType | null;
   // 当前播放歌曲的url
@@ -44,7 +44,7 @@ interface MusicState {
 
 const useMusicStore = create<MusicState>(
   devtools((set, get) => ({
-    index: 0,
+    index: null,
     currentSong: null,
     url: '',
     playlist: [],
