@@ -130,7 +130,7 @@ const PlayList = () => {
         <DetialLoading />
       ) : (
         <>
-          <ul className="w-full flex-1  flex-col space-y-1 overflow-auto ">
+          <ul className="w-full flex-1  flex-col space-y-1 overflow-auto scrollbar-hide">
             {playlist.map((song: SongType, i: number) => {
               const globalIndex = (currentPage - 1) * itemsPerPage + i + 1;
               const songIndex = globalIndex - 1;

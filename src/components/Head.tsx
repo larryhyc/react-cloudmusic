@@ -10,9 +10,39 @@ import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
 
 const Head = () => {
-  const { cookie } = useUserStore();
+  const {
+    cookie,
+    avatarUrl,
+    nickname,
+    userId,
+    setCookie,
+    setUserId,
+    setNickname,
+    setCreateTime,
+    setAvatarUrl,
+  } = useUserStore();
   const navigate = useNavigate();
-  useEffect(() => {});
+  useEffect(() => {
+    async function getLoginStatus() {
+      const res = await fetch(
+        `${APIURL}/login/status?timestamp=${Date.now()}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        }
+      );
+      const data = await res.json();
+      setCookie(localStorage.getItem('cloundmusic')!);
+      setUserId(data.data.profile.userId);
+      setAvatarUrl(data.data.profile.avatarUrl);
+      setNickname(data.data.profile.nickname);
+      setCreateTime(data.data.profile.createTime);
+    }
+    getLoginStatus();
+  }, [cookie]);
 
   const NoLogin = () => {
     return (
@@ -22,8 +52,8 @@ const Head = () => {
           onClick={() => navigate('/login')}
         >
           <AvatarImage src="" alt="@shadcn" className="h-8 w-8 rounded-full" />
-          <AvatarFallback className="h-8 w-8 rounded-full">
-            <User />
+          <AvatarFallback className="w-8 h-8 rounded-full">
+            <User size={18} />
           </AvatarFallback>
         </Avatar>
       </>
@@ -42,12 +72,17 @@ const Head = () => {
                 className="h-8 w-8 rounded-full"
               />
               <AvatarFallback className="h-8 w-8 rounded-full">
-                <User />
+                <Image src={avatarUrl!} className="w-8 h-8 rounded-full" />
               </AvatarFallback>
             </Avatar>
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-80"></PopoverContent>
+        <PopoverContent className="w-80">
+          <div className="flex flex-col gap-3">
+            <p>id: {userId}</p>
+            <p>name: {nickname}</p>
+          </div>
+        </PopoverContent>
       </Popover>
     );
   };

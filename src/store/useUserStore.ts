@@ -20,13 +20,13 @@ const useUserStore = create<UserState>(
     nickname: null,
     avatarUrl: null,
     createTime: null,
-    cookie: null,
+    cookie: localStorage.getItem('cloundmusic') || null,
 
     setUserId: (userId: number) => set({ userId }),
     setNickname: (nickname: string) => set({ nickname }),
     setAvatarUrl: (avatarUrl: string) => set({ avatarUrl }),
     setCreateTime: (createTime: number) => set({ createTime }),
-    setCookie: (cookie: string) => set({ cookie }),
+    setCookie: (cookie: string | null) => set({ cookie }),
   }))
 );
 

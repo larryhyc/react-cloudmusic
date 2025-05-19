@@ -71,10 +71,10 @@ const Footer = () => {
   };
 
   // 上一首
-  const handlePrev = () => handleChangeSong(index - 1);
+  const handlePrev = () => handleChangeSong(index! - 1);
 
   // 下一首
-  const handleNext = () => handleChangeSong(index + 1);
+  const handleNext = () => handleChangeSong(index! + 1);
 
   // 播放/暂停
   const handlePlayPause = () => {
