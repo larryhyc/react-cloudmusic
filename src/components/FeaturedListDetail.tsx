@@ -87,7 +87,7 @@ const PlayList = () => {
       });
 
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       return data.songs;
     } catch (error) {
       console.error('获取歌单失败:', error);

@@ -60,7 +60,7 @@ const useMusicStore = create<MusicState>(
       const { playlist } = get();
       const currentSong = playlist[index];
       const res = await fetch(
-        `${APIURL}/song/url/v1?id=${currentSong.id}&level=exhigh`
+        `${APIURL}/song/url/v1?id=${currentSong.id}&level=lossless`
       );
       const data = await res.json();
       const url = data.data?.[0]?.url || '';
