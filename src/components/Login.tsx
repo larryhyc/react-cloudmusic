@@ -2,7 +2,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -11,13 +10,10 @@ import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 import { APIURL } from '@/lib/constoct';
 import { useEffect, useRef } from 'react';
-import useUserStore from '@/store/useUserStore';
 
 const Login = () => {
   const imgRef = useRef<HTMLImageElement>(null);
   const navigator = useNavigate();
-  const { setCookie, setUserId, setNickname, setAvatarUrl, setCreateTime,getUserState } =
-    useUserStore();
 
   const getqrkey = async () => {
     try {

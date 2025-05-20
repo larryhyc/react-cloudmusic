@@ -42,7 +42,7 @@ interface MusicState {
   playSong: () => void;
 }
 
-const useMusicStore = create<MusicState>(
+const useMusicStore = create<MusicState>()(
   devtools((set, get) => ({
     index: null,
     currentSong: null,

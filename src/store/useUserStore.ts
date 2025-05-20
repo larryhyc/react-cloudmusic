@@ -14,7 +14,7 @@ interface UserState {
   setCreateTime: (createTime: number) => void;
   setCookie: (cookie: string) => void;
 }
-const useUserStore = create<UserState>(
+const useUserStore = create<UserState>()(
   devtools((set) => ({
     userId: null,
     nickname: null,
