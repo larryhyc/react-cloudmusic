@@ -2,11 +2,10 @@ import { Search, User } from 'lucide-react';
 import { Input } from './ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avartar';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { APIURL } from '@/lib/constoct';
 import Image from './ui/Image';
 import useUserStore from '@/store/useUserStore';
-import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
 
 const Head = () => {

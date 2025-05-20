@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { Slider } from '@/components/ui/slider';
-import { Button } from '@/components/ui/button';
 import {
   Play,
   Pause,
@@ -12,7 +11,6 @@ import {
 import useMusicStore from '@/store/useMuisicStore';
 import { toast } from 'sonner';
 import { APIURL } from '@/lib/constoct';
-import { SongType } from '@/type/globle';
 
 const Footer = () => {
   const {

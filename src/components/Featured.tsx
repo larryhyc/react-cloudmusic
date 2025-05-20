@@ -29,9 +29,10 @@ const FeaturedList = () => {
   const getFeaturedList = async (tag: string) => {
     const time = new Date().getTime();
     // console.log(time);
+    tag = '日语';
     try {
       const res = await fetch(
-        `${APIURL}/top/playlist/highquality?before=${time}&limit=12&cat=${'日语'}&timestamp=${Date.now()}`,
+        `${APIURL}/top/playlist/highquality?before=${time}&limit=12&cat=${tag}&timestamp=${Date.now()}`,
         {
           method: 'GET',
           headers: {

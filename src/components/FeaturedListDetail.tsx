@@ -145,7 +145,7 @@ const PlayList = () => {
                     <p className="text-sm 2xl:text-2xl ">{song.name}</p>
                     <p className="text-xs 2xl:text-2x">
                       {song.ar.map((ar) => ar.name).join(' / ')}
-                    </p>
+                   ad </p>
                   </div>
                   <div className="text-md 2xl:text-2xl text-end flex-1 ">
                     {formatDuration(song.dt)}
