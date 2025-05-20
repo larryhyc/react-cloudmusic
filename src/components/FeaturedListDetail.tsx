@@ -1,16 +1,14 @@
 import { useParams, useSearchParams } from 'react-router-dom';
 import { APIURL } from '@/lib/constoct';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from '@/components/ui/Image';
 // import { Toaster } from '@/components/ui/sonner';
 // import { SongType, chakedSongType } from '@/type/globle';
 import { Skeleton } from '@/components/ui/skeleton';
-import Pagin from './Pagin';
 import useMusicStore from '@/store/useMuisicStore';
 import { formatDuration } from '@/lib/utils';
 import { SongType } from '@/type/globle';
 import { toast } from 'sonner';
-import { ScrollArea } from '@radix-ui/react-scroll-area';
 
 const PlayList = () => {
   const { id } = useParams();
@@ -20,9 +18,8 @@ const PlayList = () => {
   const timer = searchParams.get('createTime');
   const [loading, setLoading] = useState(true);
   const [createTime, setCreateTime] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(1);
-  const itemsPerPage = 5; // 每页显示5条数据
+  // const [totalItems, setTotalItems] = useState(1);
+  // const itemsPerPage = 5; // 每页显示5条数据
   const {
     playlist,
     index,
@@ -32,11 +29,6 @@ const PlayList = () => {
     playSong,
     setIsPlaying,
   } = useMusicStore();
-
-  const currentPageData = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return playlist.slice(start, start + itemsPerPage);
-  }, [playlist, currentPage, itemsPerPage]);
 
   const getCreateTime = (createTime: number) => {
     const date = new Date(createTime);
@@ -58,6 +50,7 @@ const PlayList = () => {
   };
 
   const handlePlaySong = async (index: number) => {
+    console.log(index);
     const res = await chakeSong(index);
     if (res.success) {
       try {
@@ -101,7 +94,7 @@ const PlayList = () => {
       // console.log(allsongs);
       setCreateTime(getCreateTime(Number(timer)!));
       setLoading(false);
-      setTotalItems(data.length);
+      // setTotalItems(data.length);
     }
     init();
   }, [id]);
@@ -132,18 +125,17 @@ const PlayList = () => {
         <>
           <ul className="w-full flex-1  flex-col space-y-1 overflow-auto scrollbar-hide">
             {playlist.map((song: SongType, i: number) => {
-              const globalIndex = (currentPage - 1) * itemsPerPage + i + 1;
-              const songIndex = globalIndex - 1;
+              const songIndex = i + 1;
               return (
                 <li
                   key={song.id}
-                  onClick={() => handlePlaySong(songIndex)}
+                  onClick={() => handlePlaySong(i)}
                   className={`flex flex-row gap-x-2 2xl:gap-5 items-center p-3 rounded-xl cursor-pointer hover:bg-violet-500 ${
-                    songIndex === index ? 'bg-violet-500' : ''
+                    songIndex - 1 === index ? 'bg-violet-500' : ''
                   }`}
                 >
                   <p className="text-sm 2xl:text-2xl">
-                    {globalIndex < 10 ? `0${globalIndex}` : globalIndex}
+                    {songIndex < 10 ? `0${songIndex}` : songIndex}
                   </p>
                   <Image
                     src={song.al.picUrl}
@@ -162,15 +154,6 @@ const PlayList = () => {
               );
             })}
           </ul>
-          {/* <div className="w-full">
-            <Pagin
-              totalItems={totalItems}
-              itemsPerPage={itemsPerPage}
-              currentPage={currentPage}
-              onPageChange={setCurrentPage}
-              maxVisiblePages={7}
-            />
-          </div> */}
         </>
       )}
     </div>
