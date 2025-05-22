@@ -18,8 +18,6 @@ const PlayList = () => {
   const timer = searchParams.get('createTime');
   const [loading, setLoading] = useState(true);
   const [createTime, setCreateTime] = useState('');
-  // const [totalItems, setTotalItems] = useState(1);
-  // const itemsPerPage = 5; // 每页显示5条数据
   const {
     playlist,
     index,
@@ -50,11 +48,9 @@ const PlayList = () => {
   };
 
   const handlePlaySong = async (index: number) => {
-    console.log(index);
     const res = await chakeSong(index);
     if (res.success) {
       try {
-        // await playSongByIndex(index);
         setIsPlaying(false);
         await setIndex(index);
         const url = await setCurrentSong(index);
@@ -139,13 +135,14 @@ const PlayList = () => {
                   </p>
                   <Image
                     src={song.al.picUrl}
-                    className="w-10 h-10 rounded-lg 2xl:w-20 2xl:h-40"
+                    className="w-10 h-10 rounded-lg"
                   />
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm 2xl:text-2xl ">{song.name}</p>
                     <p className="text-xs 2xl:text-2x">
                       {song.ar.map((ar) => ar.name).join(' / ')}
-                   ad </p>
+                      ad{' '}
+                    </p>
                   </div>
                   <div className="text-md 2xl:text-2xl text-end flex-1 ">
                     {formatDuration(song.dt)}

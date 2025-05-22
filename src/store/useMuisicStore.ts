@@ -6,6 +6,8 @@ import { APIURL } from '@/lib/constoct';
 
 interface MusicState {
   // 状态
+  // 歌单id
+  playlistId: number | null;
   // 歌曲索引
   index: number | null;
   // 当前要播放的歌曲
@@ -24,6 +26,8 @@ interface MusicState {
   volume: number;
 
   // 操作
+  // 设置歌单id
+  setPlaylistId: (id: number) => void;
   // 设置索引
   setIndex: (index: number) => void;
   // 设置当前播放歌曲
@@ -53,6 +57,7 @@ const useMusicStore = create<MusicState>()(
     duration: 0,
     volume: 0.5,
 
+    setPlaylistId: (id: number) => set({ playlistId: id }), 
     setIndex: (index: number) => set({ index }),
     setPlaylist: (playlist: SongType[]) => set({ playlist }),
     // 发送请求获取歌曲的url
