@@ -153,7 +153,7 @@ const Footer = () => {
               <div className="min-w-0">
                 <p className="font-medium truncate">{currentSong.name}</p>
                 <p className="text-sm text-muted-foreground truncate">
-                  {currentSong.ar.map((ar) => ar.name).join(', ')}
+                  {currentSong.ar.map((ar) => ar.name).join(' / ')}
                 </p>
               </div>
             </>
