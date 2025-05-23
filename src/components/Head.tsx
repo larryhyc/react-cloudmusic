@@ -1,12 +1,13 @@
-import { Search, User } from 'lucide-react';
+import { LogOut, Search, User } from 'lucide-react';
 import { Input } from './ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avartar';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { useEffect } from 'react';
 import { APIURL } from '@/lib/constoct';
-import Image from './ui/Image';
 import useUserStore from '@/store/useUserStore';
 import { useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardHeader } from './ui/card';
+import { Button } from './ui/button';
 
 const Head = () => {
   const {
@@ -43,6 +44,16 @@ const Head = () => {
     getLoginStatus();
   }, [cookie]);
 
+  const logout = () => {
+    localStorage.removeItem('cloundmusic');
+    setCookie(null);
+    setUserId(null);
+    setAvatarUrl(null);
+    setNickname(null);
+    setCreateTime(null);
+    window.location.reload();
+  };
+
   const NoLogin = () => {
     return (
       <>
@@ -66,21 +77,27 @@ const Head = () => {
           <div className="flex flex-row items-center cursor-pointer">
             <Avatar className="h-full">
               <AvatarImage
-                src=""
+                src={avatarUrl!}
                 alt="@shadcn"
                 className="h-8 w-8 rounded-full"
               />
-              <AvatarFallback className="h-8 w-8 rounded-full">
-                <Image src={avatarUrl!} className="w-8 h-8 rounded-full" />
-              </AvatarFallback>
             </Avatar>
+            <span className="text-sm">{nickname}</span>
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-80">
-          <div className="flex flex-col gap-3">
-            <p>id: {userId}</p>
-            <p>name: {nickname}</p>
-          </div>
+          <Card className="flex flex-col gap-3">
+            <CardHeader className="text-sm">
+              <span>{nickname}</span>
+              <span>uid:{userId}</span>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={logout} variant="destructive">
+                <LogOut />
+                退出登录
+              </Button>
+            </CardContent>
+          </Card>
         </PopoverContent>
       </Popover>
     );

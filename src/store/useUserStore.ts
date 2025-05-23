@@ -8,11 +8,11 @@ interface UserState {
   createTime: number | null;
   cookie: string | null;
 
-  setUserId: (userId: number) => void;
-  setNickname: (nickname: string) => void;
-  setAvatarUrl: (avatarUrl: string) => void;
-  setCreateTime: (createTime: number) => void;
-  setCookie: (cookie: string) => void;
+  setUserId: (userId: number | null) => void;
+  setNickname: (nickname: string | null) => void;
+  setAvatarUrl: (avatarUrl: string | null) => void;
+  setCreateTime: (createTime: number | null) => void;
+  setCookie: (cookie: string | null) => void;
 }
 const useUserStore = create<UserState>()(
   devtools((set) => ({

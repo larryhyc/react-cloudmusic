@@ -136,3 +136,7 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.active {
+  background-color: var(--color-violet-500);
+}

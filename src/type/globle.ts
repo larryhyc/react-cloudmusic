@@ -58,3 +58,11 @@ export type isInUrl = {
   success: boolean;
   message: string;
 };
+
+export type myPlayListType = {
+  id: number;
+  name: string;
+  coverImgUrl: string;
+  playCount: number;
+  createTime: number;
+};

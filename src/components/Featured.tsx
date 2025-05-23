@@ -28,7 +28,6 @@ const FeaturedList = () => {
 
   const getFeaturedList = async (tag: string) => {
     const time = new Date().getTime();
-    // console.log(time);
     tag = '日语';
     try {
       const res = await fetch(

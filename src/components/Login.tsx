@@ -63,6 +63,7 @@ const Login = () => {
           localStorage.setItem('cloundmusic', statusRes.cookie);
           // await getLoginStatus();
           navigator('/');
+          window.location.href = '/';
         }
       }, 3000);
     } catch (error) {
@@ -84,36 +85,17 @@ const Login = () => {
     );
 
     const data = await res.json();
-    // console.log(data);
     return data;
   };
-
-  // async function getLoginStatus() {
-  //   const res = await fetch(`${APIURL}/login/status?timestamp=${Date.now()}`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     credentials: 'include',
-  //   });
-  //   const data = await res.json();
-  //   // console.log(data.data.profile);
-  //   setCookie(localStorage.getItem('cloundmusic')!);
-  //   setUserId(data.data.profile.userId);
-  //   setAvatarUrl(data.data.profile.avatarUrl);
-  //   setNickname(data.data.profile.nickname);
-  //   setCreateTime(data.data.profile.createTime);
-  //   navigator('/');
-  // }
 
   useEffect(() => {
     getqrkey();
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center w-screen h-screen p-12">
+    <div className="flex flex-col items-center justify-center w-full h-full p-12">
       <Toaster position="top-center" richColors />
-      <Card className="h-2/4 text-center">
+      <Card className=" h-4/6 text-center">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">登录</CardTitle>
           <CardDescription>
