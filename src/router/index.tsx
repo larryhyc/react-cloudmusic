@@ -20,9 +20,9 @@ const router = createBrowserRouter([
         path: '/playlist/:id',
         element: <FeaturedListDetail />,
       },
+      { path: '/login', element: <Login /> },
     ],
   },
-  { path: '/login', element: <Login /> },
 ]);
 
 export default router;

@@ -57,7 +57,7 @@ const useMusicStore = create<MusicState>()(
     duration: 0,
     volume: 0.5,
 
-    setPlaylistId: (id: number) => set({ playlistId: id }), 
+    setPlaylistId: (id: number) => set({ playlistId: id }),
     setIndex: (index: number) => set({ index }),
     setPlaylist: (playlist: SongType[]) => set({ playlist }),
     // 发送请求获取歌曲的url
@@ -65,7 +65,7 @@ const useMusicStore = create<MusicState>()(
       const { playlist } = get();
       const currentSong = playlist[index];
       const res = await fetch(
-        `${APIURL}/song/url/v1?id=${currentSong.id}&level=lossless`
+        `${APIURL}/song/url/v1?id=${currentSong.id}&level=lossless&realIP=116.25.146.177`
       );
       const data = await res.json();
       const url = data.data?.[0]?.url || '';

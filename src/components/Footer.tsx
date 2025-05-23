@@ -36,7 +36,9 @@ const Footer = () => {
   // 检查歌曲是否有版权
   const checkSong = async (songId: number) => {
     try {
-      const res = await fetch(`${APIURL}/check/music/url?id=${songId}`);
+      const res = await fetch(
+        `${APIURL}/check/music/url?id=${songId}&realIP=116.25.146.177`
+      );
       const data = await res.json();
       return data.success;
     } catch (error) {

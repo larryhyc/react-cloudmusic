@@ -39,7 +39,9 @@ const PlayList = () => {
   const chakeSong = async (index: number) => {
     const id = playlist[index].id;
     try {
-      const res = await fetch(`${APIURL}/check/music/url?id=${id}`);
+      const res = await fetch(
+        `${APIURL}/check/music/url?id=${id}&realIP=116.25.146.177`
+      );
       const data = await res.json();
       return data;
     } catch (error) {
