@@ -73,7 +73,5 @@ export type myPlayListType = {
 export type myPlayListSiderType = {
   title: string;
   url: string;
-  icon: ForwardRefExoticComponent<
-    Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
-  >;
+  img?: string;
 };

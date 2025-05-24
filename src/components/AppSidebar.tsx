@@ -14,18 +14,13 @@ import { APIURL } from '@/lib/constoct';
 import useUserStore from '@/store/useUserStore';
 import { useEffect, useState } from 'react';
 import { myPlayListSiderType, myPlayListType } from '@/type/globle';
+import Image from '@/components/ui/Image';
 // import { myPlayListType } from '@/type/globle';
 
 export function AppSidebar() {
   const { userId, cookie } = useUserStore();
   // const [likelist, setLikeList] = useState<myPlayListType[]>([]);
-  const [items, setItems] = useState([
-    {
-      title: '首页',
-      url: '/',
-      icon: Home,
-    },
-  ]);
+  const [items, setItems] = useState<myPlayListSiderType[]>([]);
 
   const getUserPlaylist = async (uid: number) => {
     try {
@@ -49,16 +44,15 @@ export function AppSidebar() {
       const playlist = await getUserPlaylist(userId!);
 
       if (playlist?.length > 0) {
-        const listItems = [] as myPlayListSiderType[];
-        playlist.map((item: myPlayListType) => {
-          listItems.push({
-            title: item.name,
-            url: `/playlist/${item.id}?img=${item.coverImgUrl}&name=${item.name}&createTime=${item.createTime}`,
-            icon: Music,
-          });
-        });
+        const listItems = playlist.map((item: myPlayListType) => ({
+          title: item.name,
+          url: `/playlist/${item.id}?img=${item.coverImgUrl}&name=${item.name}&createTime=${item.createTime}`,
+          img: item.coverImgUrl,
+        }));
 
-        setItems((prevItems) => [...prevItems, ...listItems]);
+        setItems(listItems);
+      } else {
+        setItems([]); // 如果没有数据，设置为空数组
       }
     };
 
@@ -72,18 +66,36 @@ export function AppSidebar() {
           <SidebarGroupLabel>react-网易云音乐</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to={'/'}>
+                    <Home />
+                    <span>首页</span>
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>我的歌单</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu className="space-y-3">
+                {items.map((item: myPlayListSiderType) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <NavLink to={item.url}>
+                        <Image
+                          src={item.img!}
+                          className="w-12 h-12 rounded-2xl p-3"
+                        />
+                        <span>{item.title}</span>
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
