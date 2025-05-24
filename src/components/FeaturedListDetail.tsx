@@ -2,8 +2,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { APIURL } from '@/lib/constoct';
 import { useEffect, useState } from 'react';
 import Image from '@/components/ui/Image';
-// import { Toaster } from '@/components/ui/sonner';
-// import { SongType, chakedSongType } from '@/type/globle';
+
 import { Skeleton } from '@/components/ui/skeleton';
 import useMusicStore from '@/store/useMuisicStore';
 import { formatDuration } from '@/lib/utils';
@@ -87,6 +86,7 @@ const PlayList = () => {
 
   useEffect(() => {
     async function init() {
+      setLoading(true);
       const data = await await getPlaylist(id!);
       setPlaylist(data);
       // console.log(allsongs);
@@ -95,32 +95,32 @@ const PlayList = () => {
       // setTotalItems(data.length);
     }
     init();
-  }, [id]);
+  }, [id, imgUrl, playListName, timer]);
 
   return (
     <div className="w-full h-full flex flex-col gap-y-3">
-      <div className="flex flex-row w-full h-42 2xl:h-80 gap-x-7">
-        <Image
-          src={imgUrl!}
-          cover
-          className="rounded-2xl w-42 h-42 2xl:w-80 2xl:h-80"
-        />
-        <div className="flex-1 flex-col h-full space-y-3">
-          <h2 className="text-xl 2xl:text-4xl font-bold text-violet-500 whitespace-nowrap">
-            {playListName}
-          </h2>
-          <p className="text-sm text-gray-400 2xl:text-2xl">
-            创建日期: {createTime}
-          </p>
-          <p className="text-sm text-gray-400 2xl:text-2xl">
-            歌曲数量: {playlist.length}
-          </p>
-        </div>
-      </div>
       {loading ? (
         <DetialLoading />
       ) : (
         <>
+          <div className="flex flex-row w-full h-42 2xl:h-80 gap-x-7">
+            <Image
+              src={imgUrl!}
+              cover
+              className="rounded-2xl w-42 h-42 2xl:w-80 2xl:h-80"
+            />
+            <div className="flex-1 flex-col h-full space-y-3">
+              <h2 className="text-xl 2xl:text-4xl font-bold text-violet-500 whitespace-nowrap">
+                {playListName}
+              </h2>
+              <p className="text-sm text-gray-400 2xl:text-2xl">
+                创建日期: {createTime}
+              </p>
+              <p className="text-sm text-gray-400 2xl:text-2xl">
+                歌曲数量: {playlist.length}
+              </p>
+            </div>
+          </div>
           <ul className="w-full flex-1  flex-col space-y-1 overflow-auto scrollbar-hide">
             {playlist.map((song: SongType, i: number) => {
               const songIndex = i + 1;
@@ -160,11 +160,27 @@ const PlayList = () => {
 
 const DetialLoading = () => {
   return (
-    <ul className="w-full flex flex-col space-y-1 overflow-auto">
-      {Array.from({ length: 7 }).map((_, index) => (
-        <Skeleton key={index} className="w-full h-13 rounded-xl space-y-2" />
-      ))}
-    </ul>
+    <>
+      <div className="flex flex-row w-full h-42 2xl:h-80 gap-x-7">
+        <Skeleton className="w-42 h-42 2xl:w-80 2xl:h-80 rounded-2xl" />
+        <div className="flex-1 flex-col h-full space-y-3">
+          <h2 className="text-xl 2xl:text-4xl font-bold text-violet-500 whitespace-nowrap">
+            <Skeleton className="w-50 h-7 rounded-2xl" />
+          </h2>
+          <p className="text-sm text-gray-400 2xl:text-2xl">
+            <Skeleton className="w-30 h-4 rounded-2xl" />
+          </p>
+          <p className="text-sm text-gray-400 2xl:text-2xl">
+            <Skeleton className="w-20 h-4 rounded-2xl" />
+          </p>
+        </div>
+      </div>
+      <ul className="w-full flex flex-col space-y-1 overflow-auto">
+        {Array.from({ length: 7 }).map((_, index) => (
+          <Skeleton key={index} className="w-full h-13 rounded-xl space-y-2" />
+        ))}
+      </ul>
+    </>
   );
 };
 
