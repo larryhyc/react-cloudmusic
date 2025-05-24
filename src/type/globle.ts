@@ -1,3 +1,6 @@
+import { LucideProps } from 'lucide-react';
+import { ForwardRefExoticComponent, RefAttributes } from 'react';
+
 /**
  * 获取精品歌单类型
  */
@@ -65,4 +68,12 @@ export type myPlayListType = {
   coverImgUrl: string;
   playCount: number;
   createTime: number;
+};
+
+export type myPlayListSiderType = {
+  title: string;
+  url: string;
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
+  >;
 };

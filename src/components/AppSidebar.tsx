@@ -1,4 +1,4 @@
-import { Home, Heart } from 'lucide-react';
+import { Home, Music } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import {
   Sidebar,
@@ -13,6 +13,7 @@ import {
 import { APIURL } from '@/lib/constoct';
 import useUserStore from '@/store/useUserStore';
 import { useEffect, useState } from 'react';
+import { myPlayListSiderType, myPlayListType } from '@/type/globle';
 // import { myPlayListType } from '@/type/globle';
 
 export function AppSidebar() {
@@ -48,15 +49,16 @@ export function AppSidebar() {
       const playlist = await getUserPlaylist(userId!);
 
       if (playlist?.length > 0) {
-        // 使用函数式更新确保不丢失已有项
-        setItems((prevItems) => [
-          ...prevItems,
-          {
-            title: `${playlist[0].name}`,
-            url: `/playlist/${playlist[0].id}?img=${playlist[0].coverImgUrl}&name=${playlist[0].name}&createTime=${playlist[0].createTime}`,
-            icon: Heart,
-          },
-        ]);
+        const listItems = [] as myPlayListSiderType[];
+        playlist.map((item: myPlayListType) => {
+          listItems.push({
+            title: item.name,
+            url: `/playlist/${item.id}?img=${item.coverImgUrl}&name=${item.name}&createTime=${item.createTime}`,
+            icon: Music,
+          });
+        });
+
+        setItems((prevItems) => [...prevItems, ...listItems]);
       }
     };
 
@@ -65,7 +67,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarContent>
+      <SidebarContent className="overflow-auto scrollbar-hide">
         <SidebarGroup>
           <SidebarGroupLabel>react-网易云音乐</SidebarGroupLabel>
           <SidebarGroupContent>

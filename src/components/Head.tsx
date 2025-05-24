@@ -92,7 +92,11 @@ const Head = () => {
               <span>uid:{userId}</span>
             </CardHeader>
             <CardContent>
-              <Button onClick={logout} variant="destructive">
+              <Button
+                onClick={logout}
+                variant="destructive"
+                className="cursor-pointer"
+              >
                 <LogOut />
                 退出登录
               </Button>
