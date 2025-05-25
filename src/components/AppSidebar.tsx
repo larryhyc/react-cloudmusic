@@ -79,7 +79,7 @@ export function AppSidebar() {
           <SidebarGroup>
             <SidebarGroupLabel>我的歌单</SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu className="space-y-3">
+              <SidebarMenu className="space-y-1">
                 {items.map((item: myPlayListSiderType) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
