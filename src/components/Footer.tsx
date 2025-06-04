@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import useMusicStore from '@/store/useMuisicStore';
 import { toast } from 'sonner';
-import { APIURL } from '@/lib/constoct';
+import { APIURL, IP } from '@/lib/constoct';
 
 const Footer = () => {
   const {
@@ -37,7 +37,7 @@ const Footer = () => {
   const checkSong = async (songId: number) => {
     try {
       const res = await fetch(
-        `${APIURL}/check/music/url?id=${songId}&realIP=116.25.146.177`
+        `${APIURL}/check/music/url?id=${songId}&realIP=${IP}`
       );
       const data = await res.json();
       return data.success;

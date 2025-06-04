@@ -1,5 +1,5 @@
 import { useParams, useSearchParams } from 'react-router-dom';
-import { APIURL } from '@/lib/constoct';
+import { APIURL, IP } from '@/lib/constoct';
 import { useEffect, useState } from 'react';
 import Image from '@/components/ui/Image';
 
@@ -17,14 +17,16 @@ const PlayList = () => {
   const timer = searchParams.get('createTime');
   const [loading, setLoading] = useState(true);
   const [createTime, setCreateTime] = useState('');
+  const [thislist, setTishlist] = useState<SongType[]>([]);
   const {
+    playlistId,
     playlist,
-    index,
     setPlaylist,
     setCurrentSong,
     setIndex,
     playSong,
     setIsPlaying,
+    setPlaylistId,
   } = useMusicStore();
 
   const getCreateTime = (createTime: number) => {
@@ -36,12 +38,18 @@ const PlayList = () => {
   };
 
   const chakeSong = async (index: number) => {
-    const id = playlist[index].id;
+    setPlaylistId(Number(id));
+    if (playlistId !== Number(id)) {
+      setPlaylist(thislist);
+    }
+
+    const songId = playlist[index].id;
     try {
       const res = await fetch(
-        `${APIURL}/check/music/url?id=${id}&realIP=116.25.146.177`
+        `${APIURL}/check/music/url?id=${songId}&realIP=${IP}`
       );
       const data = await res.json();
+      console.log(data);
       return data;
     } catch (error) {
       console.error('播放歌曲失败:', error);
@@ -54,8 +62,7 @@ const PlayList = () => {
       try {
         setIsPlaying(false);
         await setIndex(index);
-        const url = await setCurrentSong(index);
-        console.log(url);
+        setCurrentSong(index);
         playSong();
       } catch (error) {
         console.error('播放歌曲失败:', error);
@@ -77,7 +84,6 @@ const PlayList = () => {
       });
 
       const data = await res.json();
-      // console.log(data);
       return data.songs;
     } catch (error) {
       console.error('获取歌单失败:', error);
@@ -88,11 +94,10 @@ const PlayList = () => {
     async function init() {
       setLoading(true);
       const data = await await getPlaylist(id!);
-      setPlaylist(data);
-      // console.log(allsongs);
+      // setPlaylist(data);
+      setTishlist(data);
       setCreateTime(getCreateTime(Number(timer)!));
       setLoading(false);
-      // setTotalItems(data.length);
     }
     init();
   }, [id, imgUrl, playListName, timer]);
@@ -122,15 +127,13 @@ const PlayList = () => {
             </div>
           </div>
           <ul className="w-full flex-1  flex-col space-y-1 overflow-auto scrollbar-hide">
-            {playlist.map((song: SongType, i: number) => {
+            {thislist.map((song: SongType, i: number) => {
               const songIndex = i + 1;
               return (
                 <li
                   key={song.id}
                   onClick={() => handlePlaySong(i)}
-                  className={`flex flex-row gap-x-2 2xl:gap-5 items-center p-3 rounded-xl cursor-pointer hover:bg-violet-500 ${
-                    songIndex - 1 === index ? 'bg-violet-500' : ''
-                  }`}
+                  className={`flex flex-row gap-x-2 2xl:gap-5 items-center p-3 rounded-xl cursor-pointer hover:bg-violet-500`}
                 >
                   <p className="text-sm 2xl:text-2xl">
                     {songIndex < 10 ? `0${songIndex}` : songIndex}

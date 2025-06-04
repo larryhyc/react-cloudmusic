@@ -2,7 +2,7 @@ import { LogOut, Search, User } from 'lucide-react';
 import { Input } from './ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avartar';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { APIURL } from '@/lib/constoct';
 import useUserStore from '@/store/useUserStore';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,8 @@ import { Card, CardContent, CardHeader } from './ui/card';
 import { Button } from './ui/button';
 
 const Head = () => {
+  const [search, setSearch] = useState('');
+  let debounceTimer: NodeJS.Timeout | null = null;
   const {
     cookie,
     avatarUrl,
@@ -53,6 +55,36 @@ const Head = () => {
     setCreateTime(null);
     window.location.reload();
   };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    // 清除之前的定时器
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+
+    // 设置新的定时器
+    debounceTimer = setTimeout(() => {
+      setSearch(value);
+    }, 300); // 300ms 延迟
+  };
+
+  // 统一搜索处理函数
+  const handleSearch = () => {
+    if (search) {
+      navigate(`/search?name=${search}`);
+    }
+  };
+
+  // 记得在组件卸载时清除定时器
+  useEffect(() => {
+    return () => {
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+    };
+  }, []);
 
   const NoLogin = () => {
     return (
@@ -110,11 +142,17 @@ const Head = () => {
   return (
     <div className="flex flex-row justify-center items-center gap-4">
       <div className="flex flex-row gap-3 items-center">
-        <Search className="cursor-pointer 2xl:w-10 2xl:h-8" color="#8E51FF" />
+        <Search
+          className="cursor-pointer 2xl:w-10 2xl:h-8"
+          color="#8E51FF"
+          onClick={handleSearch}
+        />
         <Input
           type="search"
           placeholder="搜索音乐..."
           className="w-64 2xl:w-80 h-8"
+          onChange={(e) => handleChange(e)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
         />
         {cookie ? <UserDetile /> : <NoLogin />}
       </div>

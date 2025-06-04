@@ -3,6 +3,7 @@ import Layout from '../Layout/Layout';
 import Featured from '../components/Featured';
 import FeaturedListDetail from '../components/FeaturedListDetail';
 import Login from '@/components/Login';
+import SearchPage from '@/components/SearchPage';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
         element: <FeaturedListDetail />,
       },
       { path: '/login', element: <Login /> },
+      {
+        path: '/search',
+        element: <SearchPage />,
+      },
     ],
   },
 ]);

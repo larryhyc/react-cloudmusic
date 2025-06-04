@@ -2,16 +2,16 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { SongType } from '@/type/globle';
-import { APIURL } from '@/lib/constoct';
+import { APIURL, IP } from '@/lib/constoct';
 
 interface MusicState {
   // 状态
   // 歌单id
-  playlistId: number | null;
+  playlistId: number;
   // 歌曲索引
-  index: number | null;
+  index: number;
   // 当前要播放的歌曲
-  currentSong: SongType | null;
+  currentSong: SongType;
   // 当前播放歌曲的url
   url: string;
   // 歌曲列表
@@ -65,7 +65,7 @@ const useMusicStore = create<MusicState>()(
       const { playlist } = get();
       const currentSong = playlist[index];
       const res = await fetch(
-        `${APIURL}/song/url/v1?id=${currentSong.id}&level=lossless&realIP=116.25.146.177`
+        `${APIURL}/song/url/v1?id=${currentSong.id}&level=lossless&realIP=${IP}`
       );
       const data = await res.json();
       const url = data.data?.[0]?.url || '';

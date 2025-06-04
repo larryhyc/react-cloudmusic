@@ -73,7 +73,11 @@ const FeaturedList = () => {
     );
   }
   if (error != '' || featured.length == 0) {
-    return <div className="text-red-500 2xl:text-4xl">{error}</div>;
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <p className="text-xl text-center text-red-500">{error}</p>
+      </div>
+    );
   }
   if (featured.length === 12) {
     return (
