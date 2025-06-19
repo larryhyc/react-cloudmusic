@@ -101,7 +101,7 @@ const FeaturedList = () => {
               />
             </CardContent>
             <CardFooter>
-              <p className="truncate text-sm 2xl:text-2xl">{item.name}</p>
+              <p className="truncate text-sm">{item.name}</p>
             </CardFooter>
           </Card>
         ))}
@@ -119,9 +119,7 @@ const FeaturedList = () => {
 const Featured = () => {
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-2xl 2xl:text-4xl font-bold text-violet-500">
-        精选歌单
-      </h2>
+      <h2 className="text-2xl font-bold text-violet-500">精选歌单</h2>
       <div className="grid grid-cols-6 gap-3 items-start">
         <FeaturedList />
       </div>

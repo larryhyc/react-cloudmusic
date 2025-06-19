@@ -108,20 +108,14 @@ const PlayList = () => {
         <DetialLoading />
       ) : (
         <>
-          <div className="flex flex-row w-full h-42 2xl:h-80 gap-x-7">
-            <Image
-              src={imgUrl!}
-              cover
-              className="rounded-2xl w-42 h-42 2xl:w-80 2xl:h-80"
-            />
-            <div className="flex-1 flex-col h-full space-y-3">
-              <h2 className="text-xl 2xl:text-4xl font-bold text-violet-500 whitespace-nowrap">
+          <div className="flex flex-row w-full h-42 gap-x-7">
+            <Image src={imgUrl!} cover className="rounded-2xl w-42 h-42" />
+            <div className="flex flex-col h-full space-y-3">
+              <h2 className="text-xl font-bold text-violet-500 whitespace-nowrap">
                 {playListName}
               </h2>
-              <p className="text-sm text-gray-400 2xl:text-2xl">
-                创建日期: {createTime}
-              </p>
-              <p className="text-sm text-gray-400 2xl:text-2xl">
+              <p className="text-sm text-gray-400">创建日期: {createTime}</p>
+              <p className="text-sm text-gray-400">
                 歌曲数量: {playlist.length}
               </p>
             </div>
@@ -133,9 +127,9 @@ const PlayList = () => {
                 <li
                   key={song.id}
                   onClick={() => handlePlaySong(i)}
-                  className={`flex flex-row gap-x-2 2xl:gap-5 items-center p-3 rounded-xl cursor-pointer hover:bg-violet-500`}
+                  className={`flex flex-row gap-x-2 items-center p-3 rounded-xl cursor-pointer hover:bg-violet-500`}
                 >
-                  <p className="text-sm 2xl:text-2xl">
+                  <p className="text-sm">
                     {songIndex < 10 ? `0${songIndex}` : songIndex}
                   </p>
                   <Image
@@ -143,12 +137,12 @@ const PlayList = () => {
                     className="w-10 h-10 rounded-lg"
                   />
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm 2xl:text-2xl ">{song.name}</p>
-                    <p className="text-xs 2xl:text-2x">
+                    <p className="text-sm">{song.name}</p>
+                    <p className="text-xs">
                       {song.ar.map((ar) => ar.name).join(' / ')}
                     </p>
                   </div>
-                  <div className="text-md 2xl:text-2xl text-end flex-1 ">
+                  <div className="text-md text-end flex-1 ">
                     {formatDuration(song.dt)}
                   </div>
                 </li>
@@ -164,16 +158,16 @@ const PlayList = () => {
 const DetialLoading = () => {
   return (
     <>
-      <div className="flex flex-row w-full h-42 2xl:h-80 gap-x-7">
-        <Skeleton className="w-42 h-42 2xl:w-80 2xl:h-80 rounded-2xl" />
+      <div className="flex flex-row w-full h-42 gap-x-7">
+        <Skeleton className="w-42 h-42 rounded-2xl" />
         <div className="flex-1 flex-col h-full space-y-3">
-          <h2 className="text-xl 2xl:text-4xl font-bold text-violet-500 whitespace-nowrap">
+          <h2 className="text-xl font-bold text-violet-500 whitespace-nowrap">
             <Skeleton className="w-50 h-7 rounded-2xl" />
           </h2>
-          <p className="text-sm text-gray-400 2xl:text-2xl">
+          <p className="text-sm text-gray-400">
             <Skeleton className="w-30 h-4 rounded-2xl" />
           </p>
-          <p className="text-sm text-gray-400 2xl:text-2xl">
+          <p className="text-sm text-gray-400">
             <Skeleton className="w-20 h-4 rounded-2xl" />
           </p>
         </div>

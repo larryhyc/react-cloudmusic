@@ -143,14 +143,14 @@ const Head = () => {
     <div className="flex flex-row justify-center items-center gap-4">
       <div className="flex flex-row gap-3 items-center">
         <Search
-          className="cursor-pointer 2xl:w-10 2xl:h-8"
+          className="cursor-pointer"
           color="#8E51FF"
           onClick={handleSearch}
         />
         <Input
           type="search"
           placeholder="搜索音乐..."
-          className="w-64 2xl:w-80 h-8"
+          className="w-64"
           onChange={(e) => handleChange(e)}
           onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
         />
