@@ -9,9 +9,7 @@ import { Toaster } from 'sonner';
 const Layout = () => {
   return (
     <SidebarProvider className="flex h-screen scrollbar-hide">
-      <div className="w-64">
-        <AppSidebar />
-      </div>
+      <AppSidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="shrink-0 p-2">
           <Head />

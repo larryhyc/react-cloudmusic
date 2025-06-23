@@ -15,11 +15,9 @@ import useUserStore from '@/store/useUserStore';
 import { useEffect, useState } from 'react';
 import { myPlayListSiderType, myPlayListType } from '@/type/globle';
 import Image from '@/components/ui/Image';
-// import { myPlayListType } from '@/type/globle';
 
 export function AppSidebar() {
   const { userId, cookie } = useUserStore();
-  // const [likelist, setLikeList] = useState<myPlayListType[]>([]);
   const [items, setItems] = useState<myPlayListSiderType[]>([]);
 
   const getUserPlaylist = async (uid: number) => {
@@ -60,7 +58,7 @@ export function AppSidebar() {
   }, [userId, cookie]);
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarContent className="overflow-auto scrollbar-hide">
         <SidebarGroup>
           <SidebarGroupLabel>react-网易云音乐</SidebarGroupLabel>

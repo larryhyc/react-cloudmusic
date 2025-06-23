@@ -67,7 +67,7 @@ const FeaturedList = () => {
     return (
       <>
         {Array.from({ length: 12 }).map((_, index) => (
-          <Skeleton key={index} className="w-44 max-w-44 h-44 rounded-2xl" />
+          <Skeleton key={index} className="w-full h-54 rounded-2xl" />
         ))}
       </>
     );
@@ -107,12 +107,6 @@ const FeaturedList = () => {
         ))}
       </>
     );
-  } else {
-    <>
-      {Array.from({ length: 6 }).map((_, index) => (
-        <Skeleton key={index} className="w-full h-44 rounded-2xl" />
-      ))}
-    </>;
   }
 };
 
