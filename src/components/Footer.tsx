@@ -139,10 +139,10 @@ const Footer = () => {
   }, [volume, isPlaying, url]);
 
   return (
-    <footer className="bottom-0 left-0 right-0 bg-background/20 backdrop-sepia-50 border-t border-gray-700 p-4 z-50">
-      <div className="flex items-center justify-between gap-4">
+    <footer className="bottom-0 left-0 right-0 bg-background/20 backdrop-sepia-50 border-t border-gray-700 p-4 z-50 h-20">
+      <div className="flex h-full items-center justify-between gap-4">
         {/* 歌曲信息 */}
-        <div className="flex items-center gap-4 min-w-0 flex-1">
+        <div className="flex items-center gap-4 min-w-0 ">
           {currentSong ? (
             <>
               <img
@@ -163,54 +163,58 @@ const Footer = () => {
         </div>
 
         {/* 播放控制 */}
-        <div className="flex items-center space-x-6 mr-15">
-          <div
-            onClick={handlePrev}
-            aria-label="上一首"
-            className="cursor-pointer"
-          >
-            <SkipBack color="#8E51FF" className="h-5 w-5" />
+        <div className="flex flex-col h-full gap-3">
+          <div className="flex flex-row gap-6 justify-center items-center">
+            <div
+              onClick={handlePrev}
+              aria-label="上一首"
+              className="cursor-pointer"
+            >
+              <SkipBack color="#8E51FF" className="h-5 w-5" />
+            </div>
+            <div
+              onClick={handlePlayPause}
+              aria-label={isPlaying ? '暂停' : '播放'}
+              className="cursor-pointer"
+            >
+              {isPlaying ? (
+                <Pause color="#8E51FF" className="h-5 w-5" />
+              ) : (
+                <Play color="#8E51FF" className="h-5 w-5" />
+              )}
+            </div>
+            <div
+              onClick={handleNext}
+              aria-label="下一首"
+              className="cursor-pointer"
+            >
+              <SkipForward color="#8E51FF" className="h-5 w-5" />
+            </div>
           </div>
-          <div
-            onClick={handlePlayPause}
-            aria-label={isPlaying ? '暂停' : '播放'}
-            className="cursor-pointer"
-          >
-            {isPlaying ? (
-              <Pause color="#8E51FF" className="h-5 w-5" />
-            ) : (
-              <Play color="#8E51FF" className="h-5 w-5" />
-            )}
-          </div>
-          <div
-            onClick={handleNext}
-            aria-label="下一首"
-            className="cursor-pointer"
-          >
-            <SkipForward color="#8E51FF" className="h-5 w-5" />
+          <div className="flex gap-3">
+            <span className="text-sm text-muted-foreground w-10 text-right ">
+              {formatTime(currentTime)}
+            </span>
+            <Slider
+              value={[currentTime]}
+              max={duration || 1}
+              step={0.1}
+              onValueChange={([value]) => {
+                if (audioRef.current) {
+                  audioRef.current.currentTime = value;
+                  setCurrentTime(value);
+                }
+              }}
+              className="w-lg"
+            />
+            <span className="text-sm text-muted-foreground w-10 leading-5">
+              {formatTime(duration)}
+            </span>
           </div>
         </div>
 
         {/* 进度条和音量控制 */}
-        <div className="hidden md:flex items-center gap-4 flex-1 max-w-md">
-          <span className="text-sm text-muted-foreground w-10 text-right">
-            {formatTime(currentTime)}
-          </span>
-          <Slider
-            value={[currentTime]}
-            max={duration || 1}
-            step={0.1}
-            onValueChange={([value]) => {
-              if (audioRef.current) {
-                audioRef.current.currentTime = value;
-                setCurrentTime(value);
-              }
-            }}
-            className="flex-1 w-44"
-          />
-          <span className="text-sm text-muted-foreground w-10">
-            {formatTime(duration)}
-          </span>
+        <div className="flex justify-end items-center gap-4">
           <div
             onClick={toggleMute}
             aria-label={isMuted ? '取消静音' : '静音'}

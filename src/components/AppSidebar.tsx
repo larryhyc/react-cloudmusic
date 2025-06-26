@@ -58,7 +58,7 @@ export function AppSidebar() {
   }, [userId, cookie]);
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar>
       <SidebarContent className="overflow-auto scrollbar-hide">
         <SidebarGroup>
           <SidebarGroupLabel>react-网易云音乐</SidebarGroupLabel>

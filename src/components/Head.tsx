@@ -8,6 +8,7 @@ import useUserStore from '@/store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Button } from './ui/button';
+import { SidebarTrigger } from './ui/sidebar';
 
 const Head = () => {
   const [search, setSearch] = useState('');
@@ -140,8 +141,9 @@ const Head = () => {
   };
 
   return (
-    <div className="flex flex-row justify-center items-center gap-4">
-      <div className="flex flex-row gap-3 items-center">
+    <div className="flex flex-row justify-center items-center gap-4 w-full px-4">
+      <SidebarTrigger className="items-center" />
+      <div className="flex flex-row gap-3 justify-center items-center w-full">
         <Search
           className="cursor-pointer"
           color="#8E51FF"
